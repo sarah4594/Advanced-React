@@ -64,6 +64,10 @@ class UpdateItem extends Component {
       },
     })
     console.log('updated')
+    Router.push({
+      pathname: '/item',
+      query: { id: res.data.updateItem.id },
+    })
   }
 
   render() {
