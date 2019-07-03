@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import Head from 'next/head'
 import Link from 'next/link'
+import PropTypes from 'prop-types'
 import PaginationStyles from './styles/PaginationStyles'
 import { perPage } from '../config'
 
@@ -27,7 +29,7 @@ const Pagination = props => (
         <PaginationStyles>
           <Head>
             <title>
-              Sick Fits Page {page} of {pages}
+              Sick Fits! — Page {page} of {pages}
             </title>
           </Head>
           <Link
@@ -38,11 +40,11 @@ const Pagination = props => (
             }}
           >
             <a className="prev" aria-disabled={page <= 1}>
-              Prev
+              ← Prev
             </a>
           </Link>
           <p>
-            Page {page} of {pages}
+            Page {props.page} of {pages}!
           </p>
           <p>{count} Items Total</p>
           <Link
@@ -52,8 +54,8 @@ const Pagination = props => (
               query: { page: page + 1 },
             }}
           >
-            <a className="next" aria-disabled={page >= pages}>
-              Next
+            <a className="prev" aria-disabled={page >= pages}>
+              Next →
             </a>
           </Link>
         </PaginationStyles>
@@ -61,5 +63,9 @@ const Pagination = props => (
     }}
   </Query>
 )
+
+Pagination.propTypes = {
+  page: PropTypes.number,
+}
 
 export default Pagination
