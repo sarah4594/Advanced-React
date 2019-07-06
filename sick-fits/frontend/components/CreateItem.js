@@ -68,24 +68,24 @@ class CreateItem extends Component {
     })
   }
 
+  createItem = async (e, createItem) => {
+    // stop page from submitting
+    e.preventDefault()
+    // call the mutation
+    const res = await createItem()
+    // change them to the single item page
+    console.log(res)
+    Router.push({
+      pathname: '/item',
+      query: { id: res.data.createItem.id },
+    })
+  }
+
   render() {
     return (
       <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
         {(createItem, { loading, error }) => (
-          <Form
-            onSubmit={async e => {
-              // stop page fro msubmitting
-              e.preventDefault()
-              // call the mutation
-              const res = await createItem()
-              // change them to teh single item page
-              console.log(res)
-              Router.push({
-                pathname: '/item',
-                query: { id: res.data.createItem.id },
-              })
-            }}
-          >
+          <Form onSubmit={e => this.createItem(e, createItem)}>
             <Error error={error} />
             <fieldset disabled={loading} aria-busy={loading}>
               <label htmlFor="file">
