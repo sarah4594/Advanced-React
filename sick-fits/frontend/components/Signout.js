@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+/* eslint-disable no-unused-vars */
+import React from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import { CURRENT_USER_QUERY } from './User'
