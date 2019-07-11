@@ -41,10 +41,6 @@ const UPDATE_ITEM_MUTATION = gql`
 `
 
 class UpdateItem extends Component {
-  static propTypes = {
-    id: PropTypes.string.isRequired,
-  }
-
   state = {}
 
   handleChange = e => {
@@ -137,6 +133,10 @@ class UpdateItem extends Component {
       </Query>
     )
   }
+}
+
+UpdateItem.propTypes = {
+  id: PropTypes.string.isRequired,
 }
 
 export default UpdateItem

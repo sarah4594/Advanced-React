@@ -33,9 +33,6 @@ const ItemsList = styled.div`
 `
 
 class Items extends Component {
-  static propTypes = {
-    page: PropTypes.number,
-  }
   render() {
     const { page } = this.props
     return (
@@ -67,6 +64,10 @@ class Items extends Component {
       </Center>
     )
   }
+}
+
+Items.propTypes = {
+  page: PropTypes.number,
 }
 
 export default Items
