@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { randomBytes } = require('crypto')
 const { promisify } = require('util')
+const { transport, makeANiceEmail } = require('../mail')
 
 const Mutation = {
   async createItem(parent, args, ctx, info) {
@@ -41,6 +42,7 @@ const Mutation = {
       info,
     )
   },
+
   async deleteItem(parent, args, ctx, info) {
     const where = { id: args.id }
     // 1. find item
@@ -49,6 +51,7 @@ const Mutation = {
     // 3. delete it
     return ctx.db.mutation.deleteItem({ where }, info)
   },
+
   async signup(parent, args, ctx, info) {
     // Problem with authenticating when case is involved
     args.email = args.email.toLowerCase()
@@ -76,6 +79,7 @@ const Mutation = {
     // Return user to the browser
     return user
   },
+
   async signin(parent, { email, password }, ctx, info) {
     // 1. Check if there is a user with that email
     const user = await ctx.db.query.user({ where: { email } })
@@ -97,10 +101,12 @@ const Mutation = {
     // 5. Return the user
     return user
   },
+
   signout(parent, args, ctx, info) {
     ctx.response.clearCookie('token')
     return { message: 'Goodbye' }
   },
+
   async requestReset(parent, args, ctx, info) {
     // 1. Check if real user
     const user = await ctx.db.query.user({ where: { email: args.email } })
@@ -116,12 +122,24 @@ const Mutation = {
       data: { resetToken, resetTokenExpiry },
     })
     console.log(res)
-    return { message: 'Thanks' }
     //3. Email them the reset token
+    const mailRes = await transport.sendMail({
+      from: 'sarah4594@gmail.com',
+      to: user.email,
+      subject: 'Your Password Reset Token',
+      html: makeANiceEmail(`Your Password Reset Token is here!
+      \n\n
+      <a href="${
+        process.env.FRONTEND_URL
+      }/reset?resetToken=${resetToken}">Click Here to Reset</a>`),
+    })
+    // 4. Return message
+    return { message: 'Thanks' }
   },
+
   async resetPassword(parent, args, ctx, info) {
     // 1. Check if passwords match
-    if (args.password != args.confirmPassword) {
+    if (args.password !== args.confirmPassword) {
       throw new Error('Passwords do not match')
     }
     // 2. Check if it is a legit reset token
