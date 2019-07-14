@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import CreateItem from '../components/CreateItem'
 import PleaseSignIn from '../components/PleaseSignIn'
 
