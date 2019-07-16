@@ -48,7 +48,7 @@ const Permissions = props => (
               </thead>
               <tbody>
                 {data.users.map(user => (
-                  <User user={user} key={user.id} />
+                  <UserPermissions user={user} key={user.id} />
                 ))}
               </tbody>
             </Table>
@@ -59,7 +59,33 @@ const Permissions = props => (
   </Query>
 )
 
-class User extends React.Component {
+class UserPermissions extends React.Component {
+  // Usually do not want to use props to set initial state
+  // Exception: seeding - the initial data is coming from
+  // props but whenever someone changes a permission inside
+  // of the user then it is going to be updated to state
+  // then when you click save it will be sent of to backend
+  state = {
+    permissions: this.props.user.permissions,
+  }
+
+  handlePermissionChange = e => {
+    const checkbox = e.target
+    // take a copy of current permissions
+    let updatedPermissions = [...this.state.permissions]
+    // Figure put if we need to add permission...
+    if (checkbox.checked) {
+      // Add it in
+      updatedPermissions.push(checkbox.value)
+      // ...Or remove permission
+    } else {
+      updatedPermissions = updatedPermissions.filter(
+        permission => permission !== checkbox.value,
+      )
+    }
+    this.setState({ permissions: updatedPermissions })
+  }
+
   render() {
     const user = this.props.user
     return (
@@ -67,9 +93,14 @@ class User extends React.Component {
         <td>{user.name}</td>
         <td>{user.email}</td>
         {possiblePermissions.map(permission => (
-          <td key={user.id}>
+          <td key={permission}>
             <label htmlFor={`${user.id}-permission-${permission}`}>
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={this.state.permissions.includes(permission)}
+                value={permission}
+                onChange={this.handlePermissionChange}
+              />
             </label>
           </td>
         ))}
@@ -81,8 +112,13 @@ class User extends React.Component {
   }
 }
 
-User.propTypes = {
-  user: PropTypes.object,
+UserPermissions.propTypes = {
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    email: PropTypes.string,
+    id: PropTypes.string,
+    permissions: PropTypes.array,
+  }).isRequired,
 }
 
 export default Permissions
