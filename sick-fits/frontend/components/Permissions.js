@@ -95,7 +95,10 @@ class UserPermissions extends React.Component {
         {possiblePermissions.map(permission => (
           <td key={permission}>
             <label htmlFor={`${user.id}-permission-${permission}`}>
+              {/* If you have a label for attribute that matches an input id
+              then  you can the label and check the associated input */}
               <input
+                id={`${user.id}-permission-${permission}`}
                 type="checkbox"
                 checked={this.state.permissions.includes(permission)}
                 value={permission}
