@@ -16,6 +16,7 @@ type User {
   # Because we are comparing timestamps, this is a float
   resetTokenExpiry: Float
   permissions: [Permission] @scalarList(strategy: RELATION)
+  cart: [CartItem!]! @scalarList(strategy: RELATION)
 }
 
 type Item {
@@ -28,4 +29,11 @@ type Item {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   user: User!
+}
+
+type CartItem {
+  id: ID! @id
+  quantity: Int! @default(value: 1)
+  item: Item! # relationship to Item
+  user: User! # relationship to User
 }

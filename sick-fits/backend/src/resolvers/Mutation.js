@@ -195,7 +195,7 @@ const Mutation = {
   async updatePermissions(parent, args, ctx, info) {
     // 1. Check if they are logged in
     if (!ctx.request.userId) {
-      throw new Error('You must be looged in to do that!')
+      throw new Error('You must be logged in to do that!')
     }
     // 2. Query current user
     const currentUser = await ctx.db.query.user(
@@ -217,6 +217,49 @@ const Mutation = {
           },
         },
         where: { id: args.userId },
+      },
+      info,
+    )
+  },
+
+  async addToCart(parent, args, ctx, info) {
+    // 1. Make sure they are signed in
+    const { userId } = ctx.request
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!')
+    }
+    // 2. Query the users current cart
+    // Want to query by user ID and ID of item they want to put in
+    // cartItem"S" because sigular ones are usually just by id and plural has more filters
+    const [existingCartItem] = await ctx.db.query.cartItems({
+      where: {
+        user: { id: userId },
+        item: { id: args.id },
+      },
+    })
+    // 3. Check if that item is already in their cart
+    // 4A. If it is, increment by 1
+    if (existingCartItem) {
+      console.log('This item is alreay in their cart')
+      return ctx.db.mutation.updateCartItem(
+        {
+          where: { id: existingCartItem.id },
+          data: { quantity: existingCartItem.quantity + 1 },
+        },
+        info,
+      )
+    }
+    // 4B. If it's not, create freesh cart item for user
+    return ctx.db.mutation.createCartItem(
+      {
+        data: {
+          user: {
+            connect: { id: userId },
+          },
+          item: {
+            connect: { id: args.id },
+          },
+        },
       },
       info,
     )
