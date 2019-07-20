@@ -23,6 +23,7 @@ class AddToCart extends React.Component {
         }}
       >
         {addToCart => <button onClick={addToCart}>Add To Cart</button>}
+            Add{loading && 'ing'} To Cart 🛒
       </Mutation>
     )
   }

@@ -41,10 +41,10 @@ class Item extends Component {
               query: { id: item.id },
             }}
           >
-            <a>Edit</a>
+            <a>Edit ✏</a>
           </Link>
           <AddToCart id={item.id} />
-          <DeleteItem id={item.id}>Delete This Item</DeleteItem>
+          <DeleteItem id={item.id}>Delete This Item 🔥</DeleteItem>
         </div>
       </ItemStyles>
     )
