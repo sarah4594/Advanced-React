@@ -43,6 +43,14 @@ class RemoveFromCart extends React.Component {
         mutation={REMOVE_FROM_CART_MUTATION}
         variables={{ id: this.props.id }}
         update={this.update}
+        // What you think the server is going to respond with
+        optimisticResponse={{
+          __typename: 'Mutation',
+          removeFromCart: {
+            __typename: 'CartItem',
+            id: this.props.id,
+          },
+        }}
       >
         {(removeFromCart, { loading, error }) => (
           <BigButton
