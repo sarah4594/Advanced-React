@@ -1,4 +1,5 @@
 import { Query } from 'react-apollo'
+import PropTypes from 'prop-types'
 import { CURRENT_USER_QUERY } from './User'
 import SignIn from './Signin'
 
@@ -18,5 +19,9 @@ const PleaseSignIn = props => (
     }}
   </Query>
 )
+
+PleaseSignIn.propTypes = {
+  children: PropTypes.object,
+}
 
 export default PleaseSignIn
