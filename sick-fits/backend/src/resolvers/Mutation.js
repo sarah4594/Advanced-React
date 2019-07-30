@@ -298,9 +298,7 @@ const Mutation = {
   async createOrder(parent, args, ctx, info) {
     // 1. Query current user and make sure they are signed in
     const { userId } = ctx.request
-    if (!ctx.request.userId) {
-      throw new Error('You must be logged in to complete the order!')
-    }
+    if (!userId) throw new Error('You must be logged in to complete the order!')
     const user = await ctx.db.query.user(
       {
         where: {
@@ -319,8 +317,9 @@ const Mutation = {
             id
             description
             image
+            largeImage
           }}}
-          `,
+      `,
     )
 
     // 2. Recalculate the total for the price
@@ -336,9 +335,37 @@ const Mutation = {
       source: args.token,
     })
     // 4. Convert the cartItems to orderItems
+    const orderItems = user.cart.map(cartItem => {
+      const orderItem = {
+        ...cartItem.item,
+        quantity: cartItem.quantity,
+        user: { connect: { id: userId } },
+      }
+      delete orderItem.id
+      return orderItem
+    })
     // 5. Create the order
+    // Creating one type here (order) then passing it an
+    // array other other items and will create an array
+    // of order items for us in one swoop
+    const order = await ctx.db.mutation.createOrder({
+      data: {
+        total: charge.amount,
+        charge: charge.id,
+        items: { create: orderItems },
+        user: { connect: { id: userId } },
+      },
+    })
     // 6. Clean up - clear the user's cart, delete cartItems
+    const cartItemIds = user.cart.map(cartItem => cartItem.id)
+    // built in function
+    await ctx.db.mutation.deleteManyCartItems({
+      where: {
+        id_in: cartItemIds,
+      },
+    })
     // 7. Return the Order to the client
+    return order
   },
 }
 
