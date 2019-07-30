@@ -41,6 +41,7 @@ type CartItem {
 type OrderItem {
   id: ID! @id
   title: String!
+  description: String!
   image: String!
   largeImage: String!
   price: Int!
