@@ -48,19 +48,19 @@ class Order extends Component {
                 <span>{this.props.id}</span>
               </p>
               <p>
-                <span>Charge</span>
+                <span>Charge:</span>
                 <span>{order.charge}</span>
               </p>
               <p>
-                <span>Date</span>
+                <span>Created:</span>
                 <span>{format(order.createdAt, 'MMMM d, YYYY h:mm a')}</span>
               </p>
               <p>
-                <span>Order Total</span>
+                <span>Order Total:</span>
                 <span>{formatMoney(order.total)}</span>
               </p>
               <p>
-                <span>Item Count</span>
+                <span>Item Count:</span>
                 <span>{order.items.length}</span>
               </p>
               <div className="items">
