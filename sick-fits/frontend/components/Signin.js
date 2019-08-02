@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
+import Router from 'next/router'
 import Form from './styles/Form'
 import Error from './ErrorMessage'
 import { CURRENT_USER_QUERY } from './User'
@@ -22,6 +23,16 @@ class Signin extends Component {
     email: '',
   }
 
+  handleSubmit = async (e, signin) => {
+    e.preventDefault()
+    const user = await signin()
+    if (user) {
+      Router.push({
+        pathname: '/items',
+      })
+    }
+  }
+
   saveToState = e => {
     this.setState({ [e.target.name]: e.target.value })
   }
@@ -35,14 +46,7 @@ class Signin extends Component {
       >
         {(signin, { error, loading }) => {
           return (
-            <Form
-              method="post"
-              onSubmit={async e => {
-                e.preventDefault()
-                const res = await signin()
-                console.log(res)
-              }}
-            >
+            <Form method="post" onSubmit={e => this.handleSubmit(e, signin)}>
               <fieldset disabled={loading} aria-busy={loading}>
                 <h2>Sign Into Your Account</h2>
                 <Error error={error} />
