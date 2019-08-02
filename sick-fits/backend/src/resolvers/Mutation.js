@@ -321,7 +321,6 @@ const Mutation = {
           }}}
       `,
     )
-
     // 2. Recalculate the total for the price
     const amount = user.cart.reduce(
       (tally, cartItem) => tally + cartItem.item.price * cartItem.quantity,
