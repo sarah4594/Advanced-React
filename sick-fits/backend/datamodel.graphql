@@ -29,8 +29,6 @@ type Item {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   user: User!
-  # ratings: [ItemRating] @scalarList(strategy: RELATION)
-  # averageRating: Float!
 }
 
 type CartItem {
@@ -60,10 +58,3 @@ type Order {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
-
-# type ItemRating {
-#   id: ID! @id
-#   item: Item
-#   user: User
-#   rating: Int!
-# }
