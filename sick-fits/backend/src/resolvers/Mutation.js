@@ -365,6 +365,23 @@ const Mutation = {
     // 7. Return the Order to the client
     return order
   },
+
+  // async rating(parent, args, ctx, info) {
+  // 1. Make sure they are signed in
+  // const { userId } = ctx.request
+  // if (!ctx.request.userId) {
+  //   throw new Error('You must be logged in to do that!')
+  // }
+  // 2. query the item
+  // const where = { id: args.id }
+  // const item = await ctx.db.query.item({ where }, `{ id title user { id }}`)
+  // 3. check to see if they've rated already
+  // const rating = ctx.
+  // 4. create new item rating
+  // 5. sum existing rating
+  // 6. calculate average
+  // 7. return rating
+  // },
 }
 
 module.exports = Mutation
