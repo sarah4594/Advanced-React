@@ -19,6 +19,16 @@ const fakeUser = () => ({
   id: '4234',
   name: casual.name,
   email: casual.email,
+  permissions: ['USER'],
+  orders: [],
+  cart: [],
+})
+
+const fakeADMINUser = () => ({
+  __typename: 'User',
+  id: '4234',
+  name: casual.name,
+  email: casual.email,
   permissions: ['ADMIN'],
   orders: [],
   cart: [],
@@ -80,6 +90,7 @@ export {
   LocalStorageMock,
   fakeItem,
   fakeUser,
+  fakeADMINUser,
   fakeCartItem,
   fakeOrder,
   fakeOrderItem,
