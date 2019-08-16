@@ -82,3 +82,4 @@ class Signin extends Component {
 }
 
 export default Signin
+export { SIGNIN_MUTATION }
