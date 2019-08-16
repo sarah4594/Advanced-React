@@ -26,41 +26,41 @@ class RequestReset extends Component {
       <Mutation mutation={REQUEST_RESET_MUTATION} variables={this.state}>
         {/* called = boolean that says whether or not mutation
         has been called yet */}
-        {(reset, { error, loading, called }) => {
-          return (
-            <Form
-              method="post"
-              onSubmit={async e => {
-                e.preventDefault()
-                await reset()
-                this.setState({ email: '' })
-              }}
-            >
-              <fieldset disabled={loading} aria-busy={loading}>
-                <h2>Forgot Your Password</h2>
-                <Error error={error} />
-                {!error && !loading && called && (
-                  <p>Success! Check you email for a reset link</p>
-                )}
-                <label htmlFor="email">
-                  Email
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="email"
-                    value={this.state.email}
-                    onChange={this.saveToState}
-                  />
-                </label>
+        {(reset, { error, loading, called }) => (
+          <Form
+            method="post"
+            data-test="form"
+            onSubmit={async e => {
+              e.preventDefault()
+              await reset()
+              this.setState({ email: '' })
+            }}
+          >
+            <fieldset disabled={loading} aria-busy={loading}>
+              <h2>Forgot Your Password</h2>
+              <Error error={error} />
+              {!error && !loading && called && (
+                <p>Success! Check you email for a reset link</p>
+              )}
+              <label htmlFor="email">
+                Email
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="email"
+                  value={this.state.email}
+                  onChange={this.saveToState}
+                />
+              </label>
 
-                <button type="submit">Reset Password</button>
-              </fieldset>
-            </Form>
-          )
-        }}
+              <button type="submit">Reset Password</button>
+            </fieldset>
+          </Form>
+        )}
       </Mutation>
     )
   }
 }
 
 export default RequestReset
+export { REQUEST_RESET_MUTATION }
