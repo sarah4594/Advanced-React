@@ -22,9 +22,9 @@ const SIGNUP_MUTATION = gql`
 
 class Signup extends Component {
   state = {
+    email: '',
     name: '',
     password: '',
-    email: '',
   }
 
   handleSubmit = async (e, signup) => {
@@ -96,3 +96,4 @@ class Signup extends Component {
 }
 
 export default Signup
+export { SIGNUP_MUTATION }
