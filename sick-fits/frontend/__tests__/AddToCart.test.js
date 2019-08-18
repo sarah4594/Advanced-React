@@ -109,5 +109,20 @@ describe('<AddToCart />', () => {
       data: { me: me2 },
     } = await apolloClient.query({ query: CURRENT_USER_QUERY })
     expect(me2.cart).toHaveLength(1)
+    expect(me2.cart[0].id).toBe('omg123')
+    expect(me2.cart[0].quantity).toBe(3)
+  })
+
+  it('changes from add to adding chen clicked', async () => {
+    const wrapper = mount(
+      <MockedProvider mocks={mockForOne}>
+        <AddToCart id="123abc" />
+      </MockedProvider>,
+    )
+    await wait()
+    wrapper.update()
+    expect(wrapper.text()).toContain('Add To Cart')
+    wrapper.find('button').simulate('click')
+    expect(wrapper.text()).toContain('Adding To Cart')
   })
 })
