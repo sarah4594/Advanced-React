@@ -51,7 +51,7 @@ describe('<Pagination />', () => {
     expect(wrapper.find('.totalPages').text()).toEqual('5')
     const pagination = wrapper.find('div[data-test="pagination"]')
     expect(toJSON(pagination)).toMatchSnapshot()
-    console.log(pagination.debug())
+    //console.log(pagination.debug())
   })
 
   it('disables prev button on first page', async () => {

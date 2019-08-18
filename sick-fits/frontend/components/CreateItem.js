@@ -41,7 +41,7 @@ class CreateItem extends Component {
   }
 
   uploadFile = async e => {
-    console.log('Uplaoding file')
+    //console.log('Uplaoding file')
     // pull files out of selection
     const files = e.target.files
     // form data api (part of Javascript) to prep data
@@ -60,7 +60,7 @@ class CreateItem extends Component {
     )
     // parse data that comes back
     const file = await res.json()
-    console.log(file)
+    //console.log(file)
     // put the data into the spots they go into
     this.setState({
       image: file.secure_url,
@@ -74,7 +74,7 @@ class CreateItem extends Component {
     // call the mutation
     const res = await createItem()
     // change them to the single item page
-    console.log(res)
+    //console.log(res)
     Router.push({
       pathname: '/item',
       query: { id: res.data.createItem.id },
