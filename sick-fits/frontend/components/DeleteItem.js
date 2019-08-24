@@ -56,8 +56,9 @@ class DeleteItem extends Component {
 }
 
 DeleteItem.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   children: PropTypes.string,
 }
 
 export default DeleteItem
+export { DELETE_ITEM_MUTATION }
