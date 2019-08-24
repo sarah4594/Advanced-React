@@ -18,9 +18,14 @@ const SignedInNav = ({ me }) => (
       <a>{me.name}'s Account</a>
     </Link>
     {me.permissions.includes('ADMIN') && (
-      <Link href="/permissions">
-        <a>Permissions</a>
-      </Link>
+      <>
+        <Link href="/sell">
+          <a>Sell</a>
+        </Link>
+        <Link href="/permissions">
+          <a>Permissions</a>
+        </Link>
+      </>
     )}
     <Signout />
     <Mutation mutation={TOGGLE_CART_MUTATION}>
