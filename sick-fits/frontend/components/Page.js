@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styled, { ThemeProvider, injectGlobal } from 'styled-components'
 import Header from '../components/Header'
 import Meta from '../components/Meta'
@@ -10,7 +11,7 @@ const theme = {
   lightgrey: '#E1E1E1',
   offWhite: '#EDEDED',
   maxWidth: '1000px',
-  bs: '0 12px 24 px 0 rgba(0, 0, 0, 0.09)'
+  bs: '0 12px 24 px 0 rgba(0, 0, 0, 0.09)',
 }
 
 const StyledPage = styled.div`
@@ -63,6 +64,10 @@ class Page extends Component {
       </ThemeProvider>
     )
   }
+}
+
+Page.propTypes = {
+  children: PropTypes.object,
 }
 
 export default Page
