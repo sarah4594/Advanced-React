@@ -59,4 +59,8 @@ const CartCount = ({ count }) => (
   </AnimationStyles>
 )
 
+CartCount.propTypes = {
+  count: PropTypes.number,
+}
+
 export default CartCount
