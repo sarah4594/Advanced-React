@@ -68,19 +68,12 @@ function Signup() {
                   type="email"
                   name="email"
                   placeholder="email"
-                  value={email}
                   {...email}
                 />
               </label>
               <label htmlFor="name">
                 Name
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="name"
-                  value={name}
-                  {...name}
-                />
+                <input type="text" name="name" placeholder="name" {...name} />
               </label>
               <label htmlFor="password">
                 Password
@@ -88,7 +81,6 @@ function Signup() {
                   type="password"
                   name="password"
                   placeholder="password"
-                  value={password}
                   {...password}
                 />
               </label>
