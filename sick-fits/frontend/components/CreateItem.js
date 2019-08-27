@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 import Form from './styles/Form'
 import Error from './ErrorMessage'
+import { useFormInput } from './hooks'
 
 const CREATE_ITEM_MUTATION = gql`
   mutation CREATE_ITEM_MUTATION(
@@ -25,22 +26,27 @@ const CREATE_ITEM_MUTATION = gql`
   }
 `
 
-class CreateItem extends Component {
-  state = {
-    title: '',
-    description: '',
-    image: '',
-    largeImage: '',
-    price: 0,
-  }
+function CreateItem() {
+  // state = {
+  //   title: '',
+  //   description: '',
+  //   image: '',
+  //   largeImage: '',
+  //   price: 0,
+  // }
+  // handleChange = e => {
+  //   const { name, type, value } = e.target
+  //   const val = type === 'number' ? parseFloat(value) : value
+  //   this.setState({ [name]: val })
+  // }
 
-  handleChange = e => {
-    const { name, type, value } = e.target
-    const val = type === 'number' ? parseFloat(value) : value
-    this.setState({ [name]: val })
-  }
+  const title = useFormInput('')
+  const description = useFormInput('')
+  const [image, setImage] = useState('')
+  const [largeImage, setLargeImage] = useState('')
+  const price = useFormInput(0)
 
-  uploadFile = async e => {
+  const uploadFile = async e => {
     //console.log('Uplaoding file')
     // pull files out of selection
     const files = e.target.files
@@ -58,17 +64,19 @@ class CreateItem extends Component {
         body: data,
       },
     )
-    // parse data that comes back
     const file = await res.json()
+    // parse data that comes back
     //console.log(file)
     // put the data into the spots they go into
-    this.setState({
-      image: file.secure_url,
-      largeImage: file.eager[0].secure_url,
-    })
+    // this.setState({
+    //   image: file.secure_url,
+    //   largeImage: file.eager[0].secure_url,
+    // })
+    setImage(file.eager.secure_url)
+    setLargeImage(file.eager[0].secure_url)
   }
 
-  createItem = async (e, createItem) => {
+  const handleSubmit = async (e, createItem) => {
     // stop page from submitting
     e.preventDefault()
     // call the mutation
@@ -80,78 +88,80 @@ class CreateItem extends Component {
       query: { id: res.data.createItem.id },
     })
   }
+  return (
+    <Mutation
+      mutation={CREATE_ITEM_MUTATION}
+      variables={{
+        title: title.value,
+        description: description.value,
+        image: image.value,
+        largeImage: largeImage.value,
+        price: price.value,
+      }}
+    >
+      {(createItem, { loading, error }) => (
+        <Form data-test="form" onSubmit={e => handleSubmit(e, createItem)}>
+          <Error error={error} />
+          <fieldset disabled={loading} aria-busy={loading}>
+            <label htmlFor="file">
+              Image
+              <input
+                type="file"
+                id="file"
+                name="file"
+                placeholder="Upload an image"
+                required
+                onChange={uploadFile}
+              />
+              {image.value && (
+                <img width="200" src={image} alt="Upload Preview" />
+              )}
+            </label>
 
-  render() {
-    return (
-      <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
-        {(createItem, { loading, error }) => (
-          <Form data-test="form" onSubmit={e => this.createItem(e, createItem)}>
-            <Error error={error} />
-            <fieldset disabled={loading} aria-busy={loading}>
-              <label htmlFor="file">
-                Image
-                <input
-                  type="file"
-                  id="file"
-                  name="file"
-                  placeholder="Upload an image"
-                  required
-                  onChange={this.uploadFile}
-                />
-                {this.state.image && (
-                  <img
-                    width="200"
-                    src={this.state.image}
-                    alt="Upload Preview"
-                  />
-                )}
-              </label>
+            <label htmlFor="title">
+              Title
+              <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Title"
+                required
+                value={title}
+                {...title}
+              />
+            </label>
 
-              <label htmlFor="title">
-                Title
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  placeholder="Title"
-                  required
-                  value={this.state.title}
-                  onChange={this.handleChange}
-                />
-              </label>
+            <label htmlFor="price">
+              Price
+              <input
+                type="number"
+                id="price"
+                name="price"
+                placeholder="Price"
+                required
+                value={price}
+                {...price}
+              />
+            </label>
 
-              <label htmlFor="price">
-                Price
-                <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  placeholder="Price"
-                  required
-                  value={this.state.price}
-                  onChange={this.handleChange}
-                />
-              </label>
+            <label htmlFor="price">
+              Description
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Description"
+                required
+                value={description}
+                {...description}
+              />
+            </label>
 
-              <label htmlFor="price">
-                Description
-                <textarea
-                  id="description"
-                  name="description"
-                  placeholder="Description"
-                  required
-                  value={this.state.description}
-                  onChange={this.handleChange}
-                />
-              </label>
-
-              <button type="submit">Submit</button>
-            </fieldset>
-          </Form>
-        )}
-      </Mutation>
-    )
-  }
+            <button type="submit">Submit</button>
+          </fieldset>
+        </Form>
+      )}
+    </Mutation>
+  )
 }
 
 export default CreateItem
