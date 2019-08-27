@@ -46,7 +46,7 @@ function CreateItem() {
   const [largeImage, setLargeImage] = useState('')
   const price = useFormInput(0)
 
-  const uploadFile = async e => {
+  async function uploadFile(e) {
     //console.log('Uplaoding file')
     // pull files out of selection
     const files = e.target.files
@@ -72,8 +72,9 @@ function CreateItem() {
     //   image: file.secure_url,
     //   largeImage: file.eager[0].secure_url,
     // })
-    setImage(file.eager.secure_url)
+    setImage(file.secure_url)
     setLargeImage(file.eager[0].secure_url)
+    debugger
   }
 
   const handleSubmit = async (e, createItem) => {
@@ -94,8 +95,6 @@ function CreateItem() {
       variables={{
         title: title.value,
         description: description.value,
-        image: image.value,
-        largeImage: largeImage.value,
         price: price.value,
       }}
     >
@@ -113,9 +112,7 @@ function CreateItem() {
                 required
                 onChange={uploadFile}
               />
-              {image.value && (
-                <img width="200" src={image} alt="Upload Preview" />
-              )}
+              {image && <img width="200" src={image} alt="Upload Preview" />}
             </label>
 
             <label htmlFor="title">
@@ -126,7 +123,6 @@ function CreateItem() {
                 name="title"
                 placeholder="Title"
                 required
-                value={title}
                 {...title}
               />
             </label>
@@ -139,7 +135,6 @@ function CreateItem() {
                 name="price"
                 placeholder="Price"
                 required
-                value={price}
                 {...price}
               />
             </label>
@@ -151,7 +146,6 @@ function CreateItem() {
                 name="description"
                 placeholder="Description"
                 required
-                value={description}
                 {...description}
               />
             </label>
