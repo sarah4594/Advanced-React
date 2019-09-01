@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Mutation, Query } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -6,6 +6,7 @@ import { adopt } from 'react-adopt'
 import Router from 'next/router'
 import Form from './styles/Form'
 import Error from './ErrorMessage'
+import { useCurrentInput } from './hooks'
 
 // will make the items stuff visiable
 // so user knows what they are updating
@@ -57,24 +58,23 @@ const Composed = adopt({
   ),
 })
 
-/* esling-enable */
-class UpdateItem extends Component {
-  state = {}
+/* eslint-enable */
+function UpdateItem(props) {
+  // state = {}
 
-  handleChange = e => {
-    const { name, type, value } = e.target
-    const val = type === 'number' ? parseFloat(value) : value
-    this.setState({ [name]: val })
-  }
+  const title = useCurrentInput(props.title)
+  const price = useCurrentInput(props.price)
+  const description = useCurrentInput(props.description)
 
-  handleUpdateItem = async (e, updateItemMutation) => {
+  async function handleUpdateItem(e, updateItemMutation) {
     e.preventDefault()
     console.log('updating')
-    console.log(this.state)
     const res = await updateItemMutation({
       variables: {
-        id: this.props.id,
-        ...this.state,
+        id: props.id,
+        title: title.value,
+        price: price.value,
+        description: description.value,
       },
     })
     console.log('updated')
@@ -84,67 +84,62 @@ class UpdateItem extends Component {
     })
   }
 
-  render() {
-    return (
-      <Composed id={this.props.id}>
-        {({ singleItem, updateItem }) => {
-          const { data, loading } = singleItem
-          const { mutationLoading, mutationError } = updateItem
+  return (
+    <Composed id={props.id}>
+      {({ singleItem, updateItem }) => {
+        const { data, loading } = singleItem
+        const { mutationLoading, mutationError } = updateItem
 
-          if (loading) return <p>Loading...</p>
-          if (!data.item) return <p>No Item Found for ID {this.props.id}</p>
-          return (
-            <Form onSubmit={e => this.handleUpdateItem(e, updateItem)}>
-              <Error error={mutationError} />
-              <fieldset disabled={mutationLoading} aria-busy={mutationLoading}>
-                <label htmlFor="title">
-                  Title
-                  <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    placeholder="Title"
-                    required
-                    defaultValue={data.item.title}
-                    onChange={this.handleChange}
-                  />
-                </label>
+        if (loading) return <p>Loading...</p>
+        if (!data.item) return <p>No Item Found for ID {props.id}</p>
+        return (
+          <Form onSubmit={e => handleUpdateItem(e, updateItem)}>
+            <Error error={mutationError} />
+            <fieldset disabled={mutationLoading} aria-busy={mutationLoading}>
+              <label htmlFor="title">
+                Title
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  placeholder="Title"
+                  required
+                  {...title}
+                />
+              </label>
 
-                <label htmlFor="price">
-                  Price
-                  <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    placeholder="Price"
-                    required
-                    defaultValue={data.item.price}
-                    onChange={this.handleChange}
-                  />
-                </label>
+              <label htmlFor="price">
+                Price
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  placeholder="Price"
+                  required
+                  {...price}
+                />
+              </label>
 
-                <label htmlFor="price">
-                  Description
-                  <textarea
-                    id="description"
-                    name="description"
-                    placeholder="Description"
-                    required
-                    defaultValue={data.item.description}
-                    onChange={this.handleChange}
-                  />
-                </label>
+              <label htmlFor="price">
+                Description
+                <textarea
+                  id="description"
+                  name="description"
+                  placeholder="Description"
+                  required
+                  {...description}
+                />
+              </label>
 
-                <button type="submit">
-                  Sav{mutationLoading ? 'ing' : 'e'} Changes
-                </button>
-              </fieldset>
-            </Form>
-          )
-        }}
-      </Composed>
-    )
-  }
+              <button type="submit">
+                Sav{mutationLoading ? 'ing' : 'e'} Changes
+              </button>
+            </fieldset>
+          </Form>
+        )
+      }}
+    </Composed>
+  )
 }
 
 UpdateItem.propTypes = {
