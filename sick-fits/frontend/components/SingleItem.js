@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import Head from 'next/head'
+import PropTypes from 'prop-types'
 import Error from './ErrorMessage'
 import styled from 'styled-components'
 
@@ -65,6 +66,10 @@ class SingleItem extends Component {
       </Query>
     )
   }
+}
+
+SingleItem.propTypes = {
+  id: PropTypes.string,
 }
 
 export default SingleItem
